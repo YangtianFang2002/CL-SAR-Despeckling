@@ -1,0 +1,140 @@
+# ------------------------------------------------------------------------
+# Copyright (c) 2022 megvii-model. All Rights Reserved.
+# ------------------------------------------------------------------------
+# Modified from BasicSR (https://github.com/xinntao/BasicSR)
+# Copyright 2018-2020 BasicSR Authors
+# ------------------------------------------------------------------------
+# general settings
+
+# compare to base 
+name: MDN1-default
+model_type: ImageRestorationClModel
+scale: 1
+num_gpu: 1
+manual_seed: 42
+
+amp: false
+compile: false
+
+datasets:
+  train:
+    name: TrainSet
+    type: SarJointDataset
+    dataroot_gt: datasets/SARdata
+    synthetic_dataroot: datasets/AID/Images  # clean reference only
+    synthetic_ext: jpg
+    meta_info: datasets/train.txt
+
+    io_backend:
+      type: disk
+
+    # data loader
+    crop_pad_size: 64
+
+    use_shuffle: true
+    use_hflip: true
+    use_rot: true
+
+    num_worker_per_gpu: 6
+    batch_size_per_gpu: 6
+
+    dataset_enlarge_ratio: 1
+    prefetch_mode: cuda
+    pin_memory: true
+
+  val:
+    type: SarDataset
+    dataroot_gt: datasets/SARdata
+    name: ValSetAll
+    meta_info: datasets/val.txt
+
+    io_backend:
+      type: disk
+
+    crop_pad_size: 512
+
+    use_shuffle: true
+    use_hflip: false
+    use_rot: false
+
+network_g:
+  type: MDN1
+  img_channel: 1
+  width: 32
+  sc_width: 32
+  eap_pooling: max
+  enc_blk_nums: [1, 1, 2, 2]
+  middle_blk_num: 2
+  dec_blk_nums: [2, 2, 1, 1]
+
+# path
+path:
+  pretrain_network_g: ~
+  strict_load_g: true
+  resume_state: ~
+  check_resume: true
+
+# training settings
+train:
+  optim_g:
+    type: AdamW
+    lr: !!float 1e-3
+    weight_decay: !!float 1e-5
+    betas: [0.9, 0.999]
+
+  scheduler:
+    type: TrueCosineAnnealingLR
+    T_max: 55000
+    eta_min: !!float 1e-7
+
+  total_iter: 55000
+  warmup_iter: -1 # no warm up
+  net_cl_real_iters: 8000
+  net_cl_fake_iters: 16000
+  # net_cl_real_iters: 8
+  # net_cl_fake_iters: 16
+
+  # losses
+  cl_opt:
+    type: NT_Xent
+    temperature: 1.0
+
+  pixel_opt:
+    type: L1Loss
+    loss_weight: 1.0
+    reduction: mean
+  
+  pixel_opt_1:
+    type: GradMSELoss
+    loss_weight: 1.0
+    reduction: mean
+
+# validation settings
+val:
+  val_freq: !!float 5e3
+  save_img: true
+  use_image: true  # for eval
+
+  metrics:
+    psnr: # metric name, can be arbitrary
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: false
+    ssim:
+      type: calculate_ssim
+      crop_border: 0
+      test_y_channel: false
+
+# logging settings
+logger:
+  print_freq: 20
+  save_checkpoint_freq: !!float 2e4
+  use_tb_logger: true
+  wandb:
+    project: ~
+    resume_id: ~
+
+# dist training settings
+# dist_params:
+#   backend: nccl
+#   port: 29500

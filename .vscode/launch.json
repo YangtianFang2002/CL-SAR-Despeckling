@@ -1,0 +1,40 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "cwd": "${workspaceFolder}",
+            "name": "Python: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Predict",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "basicsr/predict.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "-opt",
+                "options/real/MDN1-t1.yml",
+                "-i",
+                "datasets/SARdata/multitest/Capella-X",
+                "--force_yml",
+                "path:pretrain_network_g=experiments/MDN1-t1/models/net_g_latest.pth",
+                // "--synthetic",
+                // "-o", 
+                // "datasets/SARdata/OpenSARShip_GRD/despeckled",
+                // "--tiff", "--tiff_chw", "--jpg", "--lq_output"
+            ],
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "0"
+            }
+        }
+    ]
+}
