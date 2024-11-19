@@ -1,7 +1,7 @@
 # Contrastive Learning for SAR Despeckling
-### 📖[**Paper**](PAPER_LINK) | 🖼️[**PDF**](PDF_LINK)
+### 📖[**Paper**](https://www.sciencedirect.com/science/article/pii/S0924271624004118)
 
-PyTorch codes for "[Contrastive Learning for SAR Despeckling](PAPER_LINK)", **JOURNAL_NAME**, 2024.
+PyTorch codes for "[Contrastive Learning for SAR Despeckling](https://www.sciencedirect.com/science/article/pii/S0924271624004118)", **ISPRS Journal of Photogrammetry and Remote Sensing**, 2024.
 
 ### Abstract
 >The use of synthetic aperture radar (SAR) has greatly improved our ability to capture high-resolution terrestrial images under various weather conditions. However, SAR imagery is affected by speckle noise, which distorts image details and hampers subsequent applications. Recent forays into supervised deep learning-based denoising methods, like MRDDANet and SAR-CAM, offer a promising avenue for SAR despeckling. However, they are impeded by the domain gaps between synthetic data and realistic SAR images. 
@@ -80,5 +80,17 @@ Email: justin62628@whu.edu.cn;
 If you find our work helpful in your research, kindly consider citing it. We appreciate your support！😊
 
 ```
-TODO
+@article{FANG2024376,
+title = {Contrastive learning for real SAR image despeckling},
+journal = {ISPRS Journal of Photogrammetry and Remote Sensing},
+volume = {218},
+pages = {376-391},
+year = {2024},
+issn = {0924-2716},
+doi = {https://doi.org/10.1016/j.isprsjprs.2024.11.003},
+url = {https://www.sciencedirect.com/science/article/pii/S0924271624004118},
+author = {Yangtian Fang and Rui Liu and Yini Peng and Jianjun Guan and Duidui Li and Xin Tian},
+keywords = {Real SAR despeckling, Self-supervised learning, Contrastive learning, Multi-scale despeckling network, Excitation aggregation pooling},
+}
+
 ```
